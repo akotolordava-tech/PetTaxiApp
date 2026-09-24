@@ -7,19 +7,24 @@
     <style>
         body { 
             font-family: Arial, sans-serif; 
-            background-color: #f0f4f8; 
             margin: 0; 
             padding: 20px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
+            /* ფონის ფოტო და ბნელი ფენა უკეთესი წაკითხვადობისთვის */
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         .container { 
-            background: white; 
+            background: rgba(255, 255, 255, 0.95); /* ოდნავ გამჭვირვალე თეთრი ფონი ფორმისთვის */
             padding: 25px; 
             border-radius: 16px; 
-            box-shadow: 0 4px 15px rgba(0, 120, 215, 0.15); 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); 
             width: 100%; 
             max-width: 400px; 
             border-top: 6px solid #ffcc00;
@@ -47,6 +52,7 @@
             box-sizing: border-box; 
             outline: none;
             transition: border-color 0.3s;
+            background: #fff;
         }
         input:focus, select:focus {
             border-color: #0078d7;
@@ -200,7 +206,6 @@
         }
 
         alert('რეგისტრაცია წარმატებით დასრულდა! გადაგყავთ რუკაზე...');
-        // აქედან მომხმარებელი გადავა რუკის ეკრანზე
     }
 </script>
 
