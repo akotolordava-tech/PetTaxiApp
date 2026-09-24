@@ -165,25 +165,15 @@
         .back-btn:hover {
             background-color: #d8dadf;
         }
-        /* დადასტურებისა და უარყოფის ღილაკები */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
+        /* გამოძახების ღილაკის სტილი */
+        .call-btn {
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
             margin-top: 15px;
         }
-        .confirm-btn {
-            background-color: #28a745;
-            color: #white;
-        }
-        .confirm-btn:hover {
+        .call-btn:hover {
             background-color: #218838;
-        }
-        .reject-btn {
-            background-color: #dc3545;
-            color: white;
-        }
-        .reject-btn:hover {
-            background-color: #c82333;
         }
         .step { display: none; }
         .step.active { display: block; }
@@ -294,7 +284,7 @@
         <button class="petgo-secondary-btn" onclick="openBookingScreen(true)" data-key="btn_petgo_later">📅 დაჯავშნე სამომავლოდ</button>
     </div>
 
-    <!-- ნაბიჯი 5: მისამართების არჩევა და ფასის ავტომატური ჩვენება -->
+    <!-- ნაბიჯი 5: მისამართების არჩევა და ფასის ავტომატური ჩვენება ერთადერთ გამოძახების ღილაკთან ერთად -->
     <div id="step-booking" class="step">
         <h2 id="booking-title" data-key="title_booking">მგზავრობის დეტალები</h2>
         
@@ -327,13 +317,10 @@
             </select>
         </div>
 
-        <!-- ფასისა და დადასტურების ბლოკი (ავტომატურად ჩნდება) -->
+        <!-- ფასისა და გამოძახების ღილაკის ბლოკი -->
         <div id="price-display">
             <div id="price-text"></div>
-            <div class="action-buttons">
-                <button class="confirm-btn" onclick="confirmOrder()" data-key="btn_confirm">დადასტურება</button>
-                <button class="reject-btn" onclick="rejectOrder()" data-key="btn_reject">უარყოფა</button>
-            </div>
+            <button class="call-btn" onclick="callTaxi()" data-key="btn_call">გამოძახება</button>
         </div>
 
         <button class="back-btn" onclick="goBackToPetGo()" data-key="btn_back" style="margin-top: 15px;">← უკან</button>
@@ -376,11 +363,9 @@
             label_destination: "🏁 დანიშნულების ადგილი",
             opt_select_start: "აირჩიეთ საწყისი მისამართი",
             opt_select_end: "აირჩიეთ დანიშნულების მისამართი",
-            btn_confirm: "დადასტურება",
-            btn_reject: "უარყოფა",
+            btn_call: "გამოძახება",
             price_label: "მომსახურების ღირებულება: ",
-            success_confirm: "შეკვეთა წარმატებით დადასტურდა! მძღოლი გზაშია.",
-            reject_msg: "შეკვეთა უარყოფილია.",
+            success_call: "შეკვეთა მიღებულია! მძღოლი გზაშია.",
             err_phone: "გთხოვთ შეიყვანოთ სწორი ნომერი",
             err_code: "კოდი შედგება 4 ნიშნისგან",
             err_name: "გთხოვთ მიუთითოთ სახელი და გვარი",
@@ -421,11 +406,9 @@
             label_destination: "🏁 Destination Address",
             opt_select_start: "Select start address",
             opt_select_end: "Select destination address",
-            btn_confirm: "Confirm",
-            btn_reject: "Reject",
+            btn_call: "Call Taxi",
             price_label: "Service price: ",
-            success_confirm: "Order successfully confirmed! Driver is on the way.",
-            reject_msg: "Order rejected.",
+            success_call: "Order accepted! Driver is on the way.",
             err_phone: "Please enter a valid phone number",
             err_code: "Code must be 4 digits",
             err_name: "Please enter your full name",
@@ -466,11 +449,9 @@
             label_destination: "🏁 Адрес назначения",
             opt_select_start: "Выберите начальный адрес",
             opt_select_end: "Выберите адрес назначения",
-            btn_confirm: "Подтвердить",
-            btn_reject: "Отклонить",
+            btn_call: "Вызвать",
             price_label: "Стоимость услуг: ",
-            success_confirm: "Заказ успешно подтвержден! Водитель в пути.",
-            reject_msg: "Заказ отклонен.",
+            success_call: "Заказ принят! Водитель в пути.",
             err_phone: "Пожалуйста, введите правильный номер",
             err_code: "Код должен состоять из 4 цифр",
             err_name: "Пожалуйста, укажите имя и фамилию",
@@ -548,7 +529,6 @@
         const datetimeContainer = document.getElementById('datetime-container');
         const bookingTitle = document.getElementById('booking-title');
         
-        // ფანჯრის გახსნისას ვასუფთავებთ ველებს და ვმალავთ ფასს
         document.getElementById('startAddress').selectedIndex = 0;
         document.getElementById('endAddress').selectedIndex = 0;
         document.getElementById('price-display').style.display = 'none';
@@ -570,7 +550,6 @@
         document.getElementById('step-petgo').classList.add('active');
     }
 
-    // ავტომატური გამოთვლა მისამართების არჩევისას
     function checkAndCalculatePrice() {
         const start = document.getElementById('startAddress').value;
         const end = document.getElementById('endAddress').value;
@@ -578,28 +557,20 @@
         const priceDisplay = document.getElementById('price-display');
         const priceText = document.getElementById('price-text');
 
-        // თუ ორივე მისამართი არჩეულია (და ჯავშნის შემთხვევაში თარიღიც მითითებულია)
         if (start && end && (!isBookingLater || datetime)) {
-            // მოცემული ფასებიდან რანდომული არჩევანი: 25, 30, 48, 54, 23
             const prices = [25, 30, 48, 54, 23];
             const randomPrice = prices[Math.floor(Math.random() * prices.length)];
 
             priceText.innerHTML = `${translations[currentLang].price_label}<strong>${randomPrice} ლარი</strong>`;
             priceDisplay.style.display = 'block';
         } else if (isBookingLater && start && end && !datetime) {
-            // თუ ჯავშანია და თარიღი არ მიუთითებია
             alert(translations[currentLang].err_datetime);
         }
     }
 
-    function confirmOrder() {
-        alert(translations[currentLang].success_confirm);
-        openBookingScreen(isBookingLater); // თავიდან ვასუფთავებთ
-    }
-
-    function rejectOrder() {
-        alert(translations[currentLang].reject_msg);
-        openBookingScreen(isBookingLater); // თავიდან ვასუფთავებთ
+    function callTaxi() {
+        alert(translations[currentLang].success_call);
+        openBookingScreen(isBookingLater);
     }
 </script>
 
