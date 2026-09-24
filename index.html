@@ -179,8 +179,8 @@
             <input type="text" id="fullname" placeholder="მაგ: გიორგი ბერიძე" required>
         </div>
         <div class="form-group">
-            <label data-key="label_id">პირადი ნომერი</label>
-            <input type="text" id="id-number" placeholder="11 ნიშნა პირადი ნომერი" maxlength="11">
+            <label data-key="label_altphone">დამატებითი ტელეფონის ნომერი</label>
+            <input type="tel" id="alt-phone" placeholder="+995 5xx xx xx xx">
         </div>
         <div class="form-group">
             <label data-key="label_address">მისამართი</label>
@@ -192,6 +192,7 @@
             <select id="pet-type">
                 <option value="dog" data-key="opt_dog">ძაღლი</option>
                 <option value="cat" data-key="opt_cat">კატა</option>
+                <option value="other" data-key="opt_other">სხვა</option>
             </select>
         </div>
         <div class="form-group">
@@ -232,11 +233,12 @@
             btn_verify: "დადასტურება",
             title_profile: "პროფილის შევსება",
             label_fullname: "სახელი და გვარი",
-            label_id: "პირადი ნომერი",
+            label_altphone: "დამატებითი ტელეფონის ნომერი",
             label_address: "მისამართი",
             label_pettype: "ცხოველის ტიპი",
             opt_dog: "ძაღლი",
             opt_cat: "კატა",
+            opt_other: "სხვა",
             label_petname: "ცხოველის სახელი",
             label_petweight: "ცხოველის წონა (კგ)",
             label_petsize: "ცხოველის ზომა",
@@ -259,11 +261,12 @@
             btn_verify: "Verify",
             title_profile: "Complete Profile",
             label_fullname: "Full Name",
-            label_id: "ID Number",
+            label_altphone: "Alternative Phone Number",
             label_address: "Address",
             label_pettype: "Pet Type",
             opt_dog: "Dog",
             opt_cat: "Cat",
+            opt_other: "Other",
             label_petname: "Pet's Name",
             label_petweight: "Pet's Weight (kg)",
             label_petsize: "Pet's Size",
@@ -286,11 +289,12 @@
             btn_verify: "Подтвердить",
             title_profile: "Заполнение профиля",
             label_fullname: "Имя и фамилия",
-            label_id: "Личный номер",
+            label_altphone: "Дополнительный номер телефона",
             label_address: "Адрес",
             label_pettype: "Тип питомца",
             opt_dog: "Собака",
             opt_cat: "Кошка",
+            opt_other: "Другое",
             label_petname: "Кличка питомца",
             label_petweight: "Вес питомца (кг)",
             label_petsize: "Размер питомца",
@@ -312,11 +316,9 @@
     function setLanguage(lang) {
         currentLang = lang;
         
-        // აქტიური ღილაკის სტილის შეცვლა
         document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
 
-        // ყველა ტექსტის განახლება ატრიბუტის (data-key) მიხედვით
         document.querySelectorAll('[data-key]').forEach(el => {
             const key = el.getAttribute('data-key');
             if (translations[lang][key]) {
