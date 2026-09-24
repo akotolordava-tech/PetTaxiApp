@@ -29,6 +29,8 @@
             border-top: 6px solid #ffcc00;
             text-align: center;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         /* ენების არჩევანი ზედა მარჯვენა კუთხეში */
         .lang-switcher {
@@ -94,6 +96,62 @@
         input:focus, select:focus {
             border-color: #0078d7;
         }
+        
+        /* რაოდენობების ამორჩევის სტილი (+ / -) */
+        .counter-section {
+            background: #f8fbff;
+            border: 1px solid #d0e7ff;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .counter-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .counter-row:last-child {
+            margin-bottom: 0;
+        }
+        .counter-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+        }
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .counter-btn {
+            width: 28px;
+            height: 28px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+        .counter-btn:hover {
+            background-color: #005fa3;
+        }
+        .counter-value {
+            font-size: 14px;
+            font-weight: bold;
+            width: 20px;
+            text-align: center;
+            color: #333;
+        }
+
         .checkbox-group {
             display: flex;
             align-items: flex-start;
@@ -165,7 +223,6 @@
         .back-btn:hover {
             background-color: #d8dadf;
         }
-        /* გამოძახების ღილაკის სტილი */
         .call-btn {
             background-color: #28a745;
             color: white;
@@ -226,7 +283,7 @@
         <button class="back-btn" onclick="goBackToPhone()" data-key="btn_back">← უკან დაბრუნება</button>
     </div>
 
-    <!-- ნაბიჯი 3: პირადი და ცხოველის მონაცემები -->
+    <!-- ნაბიჯი 3: პირადი, ცხოველის და რაოდენობების მონაცემები -->
     <div id="step-profile" class="step">
         <h2 data-key="title_profile">პროფილის შევსება</h2>
         <div class="form-group">
@@ -241,6 +298,41 @@
             <label data-key="label_address">მისამართი</label>
             <input type="text" id="address" placeholder="ქალაქი, ქუჩა, კორპუსი">
         </div>
+        
+        <!-- მგზავრების, ცხოველების და ბარგის რაოდენობის ბლოკი -->
+        <label data-key="label_counts_title" style="margin-bottom: 8px;">მგზავრების და ტვირთის რაოდენობა</label>
+        <div class="counter-section">
+            <!-- ადამიანი -->
+            <div class="counter-row">
+                <span class="counter-label" data-key="count_human">👤 ადამიანი</span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="updateCount('human', -1)">-</button>
+                    <span id="count-human-val" class="counter-value">1</span>
+                    <button class="counter-btn" onclick="updateCount('human', 1)">+</button>
+                </div>
+            </div>
+            <hr style="margin: 8px 0; border: 0; border-top: 1px solid #e0effe;">
+            <!-- ცხოველი -->
+            <div class="counter-row">
+                <span class="counter-label" data-key="count_pet">🐾 ცხოველი</span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="updateCount('pet', -1)">-</button>
+                    <span id="count-pet-val" class="counter-value">1</span>
+                    <button class="counter-btn" onclick="updateCount('pet', 1)">+</button>
+                </div>
+            </div>
+            <hr style="margin: 8px 0; border: 0; border-top: 1px solid #e0effe;">
+            <!-- ბარგი -->
+            <div class="counter-row">
+                <span class="counter-label" data-key="count_luggage">🧳 ბარგი</span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="updateCount('luggage', -1)">-</button>
+                    <span id="count-luggage-val" class="counter-value">0</span>
+                    <button class="counter-btn" onclick="updateCount('luggage', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
         <hr style="margin: 15px 0; border: 0; border-top: 1px solid #e0effe;">
         <div class="form-group">
             <label data-key="label_pettype">ცხოველის ტიპი</label>
@@ -284,7 +376,7 @@
         <button class="petgo-secondary-btn" onclick="openBookingScreen(true)" data-key="btn_petgo_later">📅 დაჯავშნე სამომავლოდ</button>
     </div>
 
-    <!-- ნაბიჯი 5: მისამართების არჩევა და ფასის ავტომატური ჩვენება ერთადერთ გამოძახების ღილაკთან ერთად -->
+    <!-- ნაბიჯი 5: მისამართების არჩევა და ფასის ავტომატური ჩვენება -->
     <div id="step-booking" class="step">
         <h2 id="booking-title" data-key="title_booking">მგზავრობის დეტალები</h2>
         
@@ -340,6 +432,10 @@
             label_fullname: "სახელი და გვარი",
             label_altphone: "დამატებითი ტელეფონის ნომერი",
             label_address: "მისამართი",
+            label_counts_title: "მგზავრების და ტვირთის რაოდენობა",
+            count_human: "👤 ადამიანი",
+            count_pet: "🐾 ცხოველი",
+            count_luggage: "🧳 ბარგი",
             label_pettype: "ცხოველის ტიპი",
             opt_dog: "ძაღლი",
             opt_cat: "კატა",
@@ -383,6 +479,10 @@
             label_fullname: "Full Name",
             label_altphone: "Alternative Phone Number",
             label_address: "Address",
+            label_counts_title: "Passengers and Cargo Count",
+            count_human: "👤 Human",
+            count_pet: "🐾 Pet",
+            count_luggage: "🧳 Luggage",
             label_pettype: "Pet Type",
             opt_dog: "Dog",
             opt_cat: "Cat",
@@ -426,6 +526,10 @@
             label_fullname: "Имя и фамилия",
             label_altphone: "Дополнительный номер телефона",
             label_address: "Адрес",
+            label_counts_title: "Количество пассажиров и багажа",
+            count_human: "👤 Человек",
+            count_pet: "🐾 Питомец",
+            count_luggage: "🧳 Багаж",
             label_pettype: "Тип питомца",
             opt_dog: "Собака",
             opt_cat: "Кошка",
@@ -462,6 +566,23 @@
 
     let currentLang = 'ka';
     let isBookingLater = false;
+
+    // შენახული რაოდენობების მონაცემები
+    let counts = {
+        human: 1,
+        pet: 1,
+        luggage: 0
+    };
+
+    function updateCount(type, change) {
+        counts[type] += change;
+        // მინიმალური ზღვარი: ადამიანი და ცხოველი მინიმუმ 1 უნდა იყოს, ბარგი 0-მდე
+        if (type === 'human' && counts.human < 1) counts.human = 1;
+        if (type === 'pet' && counts.pet < 1) counts.pet = 1;
+        if (type === 'luggage' && counts.luggage < 0) counts.luggage = 0;
+
+        document.getElementById(`count-${type}-val`).innerText = counts[type];
+    }
 
     function setLanguage(lang) {
         currentLang = lang;
@@ -559,7 +680,10 @@
 
         if (start && end && (!isBookingLater || datetime)) {
             const prices = [25, 30, 48, 54, 23];
-            const randomPrice = prices[Math.floor(Math.random() * prices.length)];
+            let randomPrice = prices[Math.floor(Math.random() * prices.length)];
+            
+            // დამატებითი ლოგიკა: თუ მგზავრების ან ბარგის რაოდენობა მეტია, ფასი მცირედით იზრდება
+            randomPrice += (counts.human - 1) * 5 + (counts.luggage * 3);
 
             priceText.innerHTML = `${translations[currentLang].price_label}<strong>${randomPrice} ლარი</strong>`;
             priceDisplay.style.display = 'block';
