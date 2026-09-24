@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="ka" id="html-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -133,7 +133,6 @@
         button:hover { 
             background-color: #e6b800; 
         }
-        /* PetGo მთავარი მენიუს ღილაკები */
         .petgo-main-btn {
             background-color: #0078d7;
             color: #fff;
@@ -256,7 +255,7 @@
         <button onclick="completeRegistration()" data-key="btn_finish">რეგისტრაციის დასრულება</button>
     </div>
 
-    <!-- ნაბიჯი 4: PetGo მთავარი მენიუ (ორი ღილაკით) -->
+    <!-- ნაბიჯი 4: PetGo მთავარი მენიუ -->
     <div id="step-petgo" class="step">
         <h2 data-key="title_petgo">მიიღეთ მომსახურება</h2>
         <p style="color: #666; font-size: 14px; margin-bottom: 20px;" data-key="subtitle_petgo">აირჩიეთ მომსახურების ტიპი</p>
@@ -264,18 +263,17 @@
         <button class="petgo-secondary-btn" onclick="openBookingScreen(true)" data-key="btn_petgo_later">📅 დაჯავშნე სამომავლოდ</button>
     </div>
 
-    <!-- ნაბიჯი 5: მისამართების და (სურვილისამებრ) თარიღის ჩასაწერი ფანჯარა -->
+    <!-- ნაბიჯი 5: მისამართების და თარიღის ფანჯარა -->
     <div id="step-booking" class="step">
         <h2 id="booking-title" data-key="title_booking">მგზავრობის დეტალები</h2>
         
-        <!-- თარიღისა და საათის ველი (ჩნდება მხოლოდ ჯავშნისას) -->
         <div id="datetime-container" class="form-group" style="display: none;">
             <label data-key="label_datetime">🗓️ მიუთითეთ თარიღი და საათი</label>
             <input type="datetime-local" id="booking-datetime">
         </div>
 
         <div class="form-group">
-            <label data-key="label_pickup">📍 საწყისი მისამართი (სად აიყვანონ)</label>
+            <label data-key="label_pickup">📍 საწყისი მისამართი (სად აყვანონ)</label>
             <input type="text" id="pickup-address" placeholder="მაგ: რუსთაველის გამზირი 12">
         </div>
         <div class="form-group">
@@ -288,7 +286,6 @@
 </div>
 
 <script>
-    // ენების ლექსიკონი
     const translations = {
         ka: {
             title_login: "PetTaxi - ში შესვლა",
@@ -418,15 +415,25 @@
     function setLanguage(lang) {
         currentLang = lang;
         
+        // ვცვლით HTML-ის მთავარ ენის ატრიბუტს (lang="en", "ru" ან "ka")
+        document.getElementById('html-root').setAttribute('lang', lang);
+
+        // აქტიური ღილაკის ფერის გადართვა
         document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
 
+        // ვცვლით ყველა ტექსტს საიტზე, რომელსაც data-key ატრიბუტი აქვს
         document.querySelectorAll('[data-key]').forEach(el => {
             const key = el.getAttribute('data-key');
             if (translations[lang][key]) {
                 el.innerText = translations[lang][key];
             }
         });
+
+        // თუ ჯავშნის ეკრანზეა მომხმარებელი, სათაურიც სწორ ენაზე გადავრთოთ
+        if(document.getElementById('step-booking').classList.contains('active')) {
+            document.getElementById('booking-title').innerText = isBookingLater ? translations[lang].title_booking_later : translations[lang].title_booking;
+        }
     }
 
     function sendCode() {
@@ -471,7 +478,6 @@
         document.getElementById('step-petgo').classList.add('active');
     }
 
-    // ფუნქცია ხსნის მისამართების ფანჯარას (თუ later=true, აჩვენებს თარიღის ველსაც)
     function openBookingScreen(later) {
         isBookingLater = later;
         const datetimeContainer = document.getElementById('datetime-container');
