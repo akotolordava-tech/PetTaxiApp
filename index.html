@@ -152,6 +152,46 @@
             color: #333;
         }
 
+        /* გადახდის მეთოდების სტილი */
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .payment-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: 2px solid #bce0fd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8fbff;
+            text-align: left;
+        }
+        .payment-card:hover {
+            border-color: #0078d7;
+            background: #f0f7ff;
+        }
+        .payment-card input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #0078d7;
+        }
+        .payment-info span.title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            display: block;
+        }
+        .payment-info span.desc {
+            font-size: 12px;
+            color: #666;
+        }
+
         .checkbox-group {
             display: flex;
             align-items: flex-start;
@@ -302,7 +342,6 @@
         <!-- მგზავრების, ცხოველების და ბარგის რაოდენობის ბლოკი -->
         <label data-key="label_counts_title" style="margin-bottom: 8px;">მგზავრების და ტვირთის რაოდენობა</label>
         <div class="counter-section">
-            <!-- ადამიანი -->
             <div class="counter-row">
                 <span class="counter-label" data-key="count_human">👤 ადამიანი</span>
                 <div class="counter-controls">
@@ -312,7 +351,6 @@
                 </div>
             </div>
             <hr style="margin: 8px 0; border: 0; border-top: 1px solid #e0effe;">
-            <!-- ცხოველი -->
             <div class="counter-row">
                 <span class="counter-label" data-key="count_pet">🐾 ცხოველი</span>
                 <div class="counter-controls">
@@ -322,7 +360,6 @@
                 </div>
             </div>
             <hr style="margin: 8px 0; border: 0; border-top: 1px solid #e0effe;">
-            <!-- ბარგი -->
             <div class="counter-row">
                 <span class="counter-label" data-key="count_luggage">🧳 ბარგი</span>
                 <div class="counter-controls">
@@ -359,7 +396,6 @@
             </select>
         </div>
 
-        <!-- თანხმობის ველი -->
         <div class="checkbox-group">
             <input type="checkbox" id="save-data-consent" required>
             <label for="save-data-consent" data-key="label_consent">ვეთანხმები, რომ PetTaxi-ს მომსახურების სერვისმა შეინახოს ჩემი და ცხოველის მონაცემები სამომავლო შეკვეთების გამარტივების მიზნით.</label>
@@ -376,7 +412,7 @@
         <button class="petgo-secondary-btn" onclick="openBookingScreen(true)" data-key="btn_petgo_later">📅 დაჯავშნე სამომავლოდ</button>
     </div>
 
-    <!-- ნაბიჯი 5: მისამართების არჩევა და ფასის ავტომატური ჩვენება -->
+    <!-- ნაბიჯი 5: მისამართების არჩევა და ფასის ჩვენება -->
     <div id="step-booking" class="step">
         <h2 id="booking-title" data-key="title_booking">მგზავრობის დეტალები</h2>
         
@@ -409,13 +445,39 @@
             </select>
         </div>
 
-        <!-- ფასისა და გამოძახების ღილაკის ბლოკი -->
         <div id="price-display">
-            <div id="price-text"></div>
-            <button class="call-btn" onclick="callTaxi()" data-key="btn_call">გამოძახება</button>
+            <div id="price-text" style="margin-bottom: 10px;"></div>
+            <button class="call-btn" onclick="proceedToPayment()" data-key="btn_call">გამოძახება</button>
         </div>
 
         <button class="back-btn" onclick="goBackToPetGo()" data-key="btn_back" style="margin-top: 15px;">← უკან</button>
+    </div>
+
+    <!-- ნაბიჯი 6: გადახდის მეთოდის არჩევა -->
+    <div id="step-payment" class="step">
+        <h2 data-key="title_payment">გადახდის მეთოდი</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 15px;" id="payment-amount-summary"></p>
+        
+        <div class="payment-options">
+            <label class="payment-card">
+                <input type="radio" name="payment-method" value="cash" checked>
+                <div class="payment-info">
+                    <span class="title" data-key="pay_cash">💵 ქეში (ნაღდი ფულით)</span>
+                    <span class="desc" data-key="pay_cash_desc">გადახდა მძღოლთან ადგილზე</span>
+                </div>
+            </label>
+            
+            <label class="payment-card">
+                <input type="radio" name="payment-method" value="card">
+                <div class="payment-info">
+                    <span class="title" data-key="pay_card">💳 ბარათით გადახდა</span>
+                    <span class="desc" data-key="pay_card_desc">ონლაინ გადახდა ბარათით</span>
+                </div>
+            </label>
+        </div>
+
+        <button class="call-btn" onclick="confirmOrder()" data-key="btn_confirm_payment">გადახდა და გამოძახება</button>
+        <button class="back-btn" onclick="goBackToBooking()" data-key="btn_back" style="margin-top: 10px;">← უკან</button>
     </div>
 </div>
 
@@ -461,7 +523,13 @@
             opt_select_end: "აირჩიეთ დანიშნულების მისამართი",
             btn_call: "გამოძახება",
             price_label: "მომსახურების ღირებულება: ",
-            success_call: "შეკვეთა მიღებულია! მძღოლი გზაშია.",
+            title_payment: "გადახდის მეთოდი",
+            pay_cash: "💵 ქეში (ნაღდი ფულით)",
+            pay_cash_desc: "გადახდა მძღოლთან ადგილზე",
+            pay_card: "💳 ბარათით გადახდა",
+            pay_card_desc: "ონლაინ გადახდა ბარათით",
+            btn_confirm_payment: "დადასტურება და გამოძახება",
+            success_call: "შეკვეთა წარმატებით მიღებულია! მძღოლი გზაშია.",
             err_phone: "გთხოვთ შეიყვანოთ სწორი ნომერი",
             err_code: "კოდი შედგება 4 ნიშნისგან",
             err_name: "გთხოვთ მიუთითოთ სახელი და გვარი",
@@ -508,7 +576,13 @@
             opt_select_end: "Select destination address",
             btn_call: "Call Taxi",
             price_label: "Service price: ",
-            success_call: "Order accepted! Driver is on the way.",
+            title_payment: "Payment Method",
+            pay_cash: "💵 Cash",
+            pay_cash_desc: "Pay to driver upon arrival",
+            pay_card: "💳 Pay by Card",
+            pay_card_desc: "Online card payment",
+            btn_confirm_payment: "Confirm & Call",
+            success_call: "Order successfully accepted! Driver is on the way.",
             err_phone: "Please enter a valid phone number",
             err_code: "Code must be 4 digits",
             err_name: "Please enter your full name",
@@ -555,7 +629,13 @@
             opt_select_end: "Выберите адрес назначения",
             btn_call: "Вызвать",
             price_label: "Стоимость услуг: ",
-            success_call: "Заказ принят! Водитель в пути.",
+            title_payment: "Способ оплаты",
+            pay_cash: "💵 Наличными (Кэш)",
+            pay_cash_desc: "Оплата водителю на месте",
+            pay_card: "💳 Банковской картой",
+            pay_card_desc: "Онлайн оплата картой",
+            btn_confirm_payment: "Подтвердить и вызвать",
+            success_call: "Заказ успешно принят! Водитель в пути.",
             err_phone: "Пожалуйста, введите правильный номер",
             err_code: "Код должен состоять из 4 цифр",
             err_name: "Пожалуйста, укажите имя и фамилию",
@@ -566,8 +646,8 @@
 
     let currentLang = 'ka';
     let isBookingLater = false;
+    let calculatedPrice = 0;
 
-    // შენახული რაოდენობების მონაცემები
     let counts = {
         human: 1,
         pet: 1,
@@ -576,7 +656,6 @@
 
     function updateCount(type, change) {
         counts[type] += change;
-        // მინიმალური ზღვარი: ადამიანი და ცხოველი მინიმუმ 1 უნდა იყოს, ბარგი 0-მდე
         if (type === 'human' && counts.human < 1) counts.human = 1;
         if (type === 'pet' && counts.pet < 1) counts.pet = 1;
         if (type === 'luggage' && counts.luggage < 0) counts.luggage = 0;
@@ -682,17 +761,28 @@
             const prices = [25, 30, 48, 54, 23];
             let randomPrice = prices[Math.floor(Math.random() * prices.length)];
             
-            // დამატებითი ლოგიკა: თუ მგზავრების ან ბარგის რაოდენობა მეტია, ფასი მცირედით იზრდება
             randomPrice += (counts.human - 1) * 5 + (counts.luggage * 3);
+            calculatedPrice = randomPrice;
 
-            priceText.innerHTML = `${translations[currentLang].price_label}<strong>${randomPrice} ლარი</strong>`;
+            priceText.innerHTML = `${translations[currentLang].price_label}<strong>${calculatedPrice} ლარი</strong>`;
             priceDisplay.style.display = 'block';
         } else if (isBookingLater && start && end && !datetime) {
             alert(translations[currentLang].err_datetime);
         }
     }
 
-    function callTaxi() {
+    function proceedToPayment() {
+        document.getElementById('payment-amount-summary').innerHTML = `${translations[currentLang].price_label}<b>${calculatedPrice} ლარი</b>`;
+        document.getElementById('step-booking').classList.remove('active');
+        document.getElementById('step-payment').classList.add('active');
+    }
+
+    function goBackToBooking() {
+        document.getElementById('step-payment').classList.remove('active');
+        document.getElementById('step-booking').classList.add('active');
+    }
+
+    function confirmOrder() {
         alert(translations[currentLang].success_call);
         openBookingScreen(isBookingLater);
     }
