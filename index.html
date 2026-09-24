@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 <html lang="ka">
 <head>
@@ -13,7 +14,6 @@
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
-            /* ფონის ფოტო და ბნელი ფენა უკეთესი წაკითხვადობისთვის */
             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('background.jpg');
             background-size: cover;
             background-position: center;
@@ -21,21 +21,30 @@
             background-attachment: fixed;
         }
         .container { 
-            background: rgba(255, 255, 255, 0.95); /* ოდნავ გამჭვირვალე თეთრი ფონი ფორმისთვის */
-            padding: 25px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 30px 25px; 
             border-radius: 16px; 
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); 
             width: 100%; 
             max-width: 400px; 
             border-top: 6px solid #ffcc00;
+            text-align: center;
+        }
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            max-width: 120px; /* აქ შეგიძლია ლოგოს ზომა აკონტროლო */
+            height: auto;
         }
         h2 { 
-            text-align: center; 
             color: #0078d7; 
             margin-bottom: 20px; 
+            font-size: 22px;
         }
         .form-group { 
             margin-bottom: 15px; 
+            text-align: left;
         }
         label { 
             display: block; 
@@ -63,6 +72,7 @@
             gap: 10px;
             margin-top: 15px;
             margin-bottom: 20px;
+            text-align: left;
         }
         .checkbox-group input {
             width: 20px;
@@ -101,9 +111,14 @@
 <body>
 
 <div class="container">
+    <!-- ლოგო -->
+    <div class="logo-container">
+        <img src="logo.png" alt="PetTaxi Logo">
+    </div>
+
     <!-- ნაბიჯი 1: ტელეფონის ნომერი -->
     <div id="step-phone" class="step active">
-        <h2>PetTaxi-ში შესვლა</h2>
+        <h2>შესვლა</h2>
         <div class="form-group">
             <label>ტელეფონის ნომერი</label>
             <input type="tel" id="phone" placeholder="+995 5xx xx xx xx" required>
