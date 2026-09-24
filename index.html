@@ -128,9 +128,19 @@
             font-weight: bold; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: background-color 0.3s;
+            margin-top: 5px;
         }
         button:hover { 
             background-color: #e6b800; 
+        }
+        /* უკან დაბრუნების ღილაკის სტილი */
+        .back-btn {
+            background-color: #e4e6eb;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .back-btn:hover {
+            background-color: #d8dadf;
         }
         .step { display: none; }
         .step.active { display: block; }
@@ -169,6 +179,7 @@
             <input type="text" id="code" placeholder="1234" maxlength="4" required>
         </div>
         <button onclick="verifyCode()" data-key="btn_verify">დადასტურება</button>
+        <button class="back-btn" onclick="goBackToPhone()" data-key="btn_back">← უკან დაბრუნება</button>
     </div>
 
     <!-- ნაბიჯი 3: პირადი და ცხოველის მონაცემები -->
@@ -231,6 +242,7 @@
             btn_send: "კოდის გაგზავნა",
             label_code: "სმს-ით მიღებული 4-ნიშნა კოდი",
             btn_verify: "დადასტურება",
+            btn_back: "← უკან დაბრუნება",
             title_profile: "პროფილის შევსება",
             label_fullname: "სახელი და გვარი",
             label_altphone: "დამატებითი ტელეფონის ნომერი",
@@ -259,6 +271,7 @@
             btn_send: "Send Code",
             label_code: "4-digit code received via SMS",
             btn_verify: "Verify",
+            btn_back: "← Go Back",
             title_profile: "Complete Profile",
             label_fullname: "Full Name",
             label_altphone: "Alternative Phone Number",
@@ -287,6 +300,7 @@
             btn_send: "Отправить код",
             label_code: "4-значный код из SMS",
             btn_verify: "Подтвердить",
+            btn_back: "← Назад",
             title_profile: "Заполнение профиля",
             label_fullname: "Имя и фамилия",
             label_altphone: "Дополнительный номер телефона",
@@ -335,6 +349,12 @@
         }
         document.getElementById('step-phone').classList.remove('active');
         document.getElementById('step-verify').classList.add('active');
+    }
+
+    // უკან დაბრუნების ფუნქცია
+    function goBackToPhone() {
+        document.getElementById('step-verify').classList.remove('active');
+        document.getElementById('step-phone').classList.add('active');
     }
 
     function verifyCode() {
