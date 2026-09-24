@@ -167,6 +167,16 @@
         }
         .step { display: none; }
         .step.active { display: block; }
+        #result {
+            margin-top: 15px;
+            padding: 12px;
+            background: #eef2f3;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            color: #2c3e50;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -263,7 +273,7 @@
         <button class="petgo-secondary-btn" onclick="openBookingScreen(true)" data-key="btn_petgo_later">📅 დაჯავშნე სამომავლოდ</button>
     </div>
 
-    <!-- ნაბიჯი 5: მისამართების და თარიღის ფანჯარა -->
+    <!-- ნაბიჯი 5: მისამართების არჩევა ქუჩების სიიდან და ფასის გამოთვლა -->
     <div id="step-booking" class="step">
         <h2 id="booking-title" data-key="title_booking">მგზავრობის დეტალები</h2>
         
@@ -273,15 +283,33 @@
         </div>
 
         <div class="form-group">
-            <label data-key="label_pickup">📍 საწყისი მისამართი (სად აყვანონ)</label>
-            <input type="text" id="pickup-address" placeholder="მაგ: რუსთაველის გამზირი 12">
+            <label data-key="label_pickup">📍 საწყისი მისამართი</label>
+            <select id="startAddress">
+                <option value="" disabled selected data-key="opt_select_start">აირჩიეთ საწყისი მისამართი</option>
+                <option value="ტარიელის ქუჩა 10ბ">ტარიელის ქუჩა 10ბ</option>
+                <option value="ნიკოლოზ ყიფშიძის 17">ნიკოლოზ ყიფშიძის 17</option>
+                <option value="ცინცაძის 49">ცინცაძის 49</option>
+                <option value="დანელიას 2">დანელიას 2</option>
+                <option value="გოგებაშვილის 44">გოგებაშვილის 44</option>
+            </select>
         </div>
+        
         <div class="form-group">
-            <label data-key="label_destination">🏁 დანიშნულების ადგილი (სად მიჰყავთ)</label>
-            <input type="text" id="destination-address" placeholder="მაგ: ვაკის პარკი">
+            <label data-key="label_destination">🏁 დანიშნულების ადგილი</label>
+            <select id="endAddress">
+                <option value="" disabled selected data-key="opt_select_end">აირჩიეთ დანიშნულების მისამართი</option>
+                <option value="ვასო გოძიაშვილის ქუჩა 13">ვასო გოძიაშვილის ქუჩა 13</option>
+                <option value="ევგენ გვალაძის 22">ევგენ გვალაძის 22</option>
+                <option value="ნოდარ დუმბაძის გამზირი 66">ნოდარ დუმბაძის გამზირი 66</option>
+                <option value="ჟიული შარტავას 19">ჟიული შარტავას 19</option>
+                <option value="მერაბ კოსტავას 3">მერაბ კოსტავას 3</option>
+            </select>
         </div>
-        <button onclick="submitOrder()" data-key="btn_order">მოთხოვნის გაგზავნა</button>
+
+        <button onclick="submitOrder()" data-key="btn_order">ფასის ნახვა და გაგზავნა</button>
         <button class="back-btn" onclick="goBackToPetGo()" data-key="btn_back">← უკან</button>
+
+        <div id="result"></div>
     </div>
 </div>
 
@@ -317,15 +345,17 @@
             title_booking: "მგზავრობის დეტალები",
             title_booking_later: "სამომავლო ჯავშანი",
             label_datetime: "🗓️ მიუთითეთ თარიღი და საათი",
-            label_pickup: "📍 საწყისი მისამართი (სად აყვანონ)",
-            label_destination: "🏁 დანიშნულების ადგილი (სად მიჰყავთ)",
+            label_pickup: "📍 საწყისი მისამართი",
+            label_destination: "🏁 დანიშნულების ადგილი",
+            opt_select_start: "აირჩიეთ საწყისი მისამართი",
+            opt_select_end: "აირჩიეთ დანიშნულების მისამართი",
             btn_order: "მოთხოვნის გაგზავნა",
             err_phone: "გთხოვთ შეიყვანოთ სწორი ნომერი",
             err_code: "კოდი შედგება 4 ნიშნისგან",
             err_name: "გთხოვთ მიუთითოთ სახელი და გვარი",
             err_consent: "მონაცემების შესანახად აუცილებელია თანხმობის მონიშვნა",
-            err_addresses: "გთხოვთ შეავსოთ ყველა სავალდებულო ველი",
-            success_order: "შეკვეთა მიღებულია! მძღოლი მალე დაგიკავშირდებათ."
+            err_addresses: "გთხოვთ, აირჩიოთ ორივე მისამართი და თარიღი!",
+            success_order: "შეკვეთა მიღებულია! ღირებულება: "
         },
         en: {
             title_login: "Sign in to PetTaxi",
@@ -359,13 +389,15 @@
             label_datetime: "🗓️ Select Date & Time",
             label_pickup: "📍 Pickup Address",
             label_destination: "🏁 Destination Address",
+            opt_select_start: "Select start address",
+            opt_select_end: "Select destination address",
             btn_order: "Send Request",
             err_phone: "Please enter a valid phone number",
             err_code: "Code must be 4 digits",
             err_name: "Please enter your full name",
             err_consent: "Consent is required to save data",
-            err_addresses: "Please fill in all required fields",
-            success_order: "Order received! Driver will contact you soon."
+            err_addresses: "Please select both addresses and date!",
+            success_order: "Order received! Price: "
         },
         ru: {
             title_login: "Вход в PetTaxi",
@@ -399,13 +431,15 @@
             label_datetime: "🗓️ Выберите дату и время",
             label_pickup: "📍 Адрес отправления",
             label_destination: "🏁 Адрес назначения",
+            opt_select_start: "Выберите начальный адрес",
+            opt_select_end: "Выберите адрес назначения",
             btn_order: "Отправить запрос",
             err_phone: "Пожалуйста, введите правильный номер",
             err_code: "Код должен состоять из 4 цифр",
             err_name: "Пожалуйста, укажите имя и фамилию",
             err_consent: "Для сохранения данных необходимо согласие",
-            err_addresses: "Пожалуйста, заполните все обязательные поля",
-            success_order: "Заказ принят! Водитель скоро с вами свяжется."
+            err_addresses: "Пожалуйста, выберите оба адреса и дату!",
+            success_order: "Заказ принят! Стоимость: "
         }
     };
 
@@ -414,15 +448,11 @@
 
     function setLanguage(lang) {
         currentLang = lang;
-        
-        // ვცვლით HTML-ის მთავარ ენის ატრიბუტს (lang="en", "ru" ან "ka")
         document.getElementById('html-root').setAttribute('lang', lang);
-
-        // აქტიური ღილაკის ფერის გადართვა
+        
         document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
 
-        // ვცვლით ყველა ტექსტს საიტზე, რომელსაც data-key ატრიბუტი აქვს
         document.querySelectorAll('[data-key]').forEach(el => {
             const key = el.getAttribute('data-key');
             if (translations[lang][key]) {
@@ -430,7 +460,6 @@
             }
         });
 
-        // თუ ჯავშნის ეკრანზეა მომხმარებელი, სათაურიც სწორ ენაზე გადავრთოთ
         if(document.getElementById('step-booking').classList.contains('active')) {
             document.getElementById('booking-title').innerText = isBookingLater ? translations[lang].title_booking_later : translations[lang].title_booking;
         }
@@ -482,6 +511,7 @@
         isBookingLater = later;
         const datetimeContainer = document.getElementById('datetime-container');
         const bookingTitle = document.getElementById('booking-title');
+        document.getElementById('result').style.display = 'none';
 
         if (later) {
             datetimeContainer.style.display = 'block';
@@ -501,16 +531,22 @@
     }
 
     function submitOrder() {
-        const pickup = document.getElementById('pickup-address').value;
-        const destination = document.getElementById('destination-address').value;
+        const start = document.getElementById('startAddress').value;
+        const end = document.getElementById('endAddress').value;
         const datetime = document.getElementById('booking-datetime').value;
+        const resultDiv = document.getElementById('result');
 
-        if(!pickup || !destination || (isBookingLater && !datetime)) {
+        if (!start || !end || (isBookingLater && !datetime)) {
             alert(translations[currentLang].err_addresses);
             return;
         }
 
-        alert(translations[currentLang].success_order);
+        // მოცემული ფასებიდან რანდომული არჩევანი: 25, 30, 48, 54, 23
+        const prices = [25, 30, 48, 54, 23];
+        const randomPrice = prices[Math.floor(Math.random() * prices.length)];
+
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `${translations[currentLang].success_order}<strong>${randomPrice} ლარი</strong>`;
     }
 </script>
 
