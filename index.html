@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetTaxi - რეგისტრაცია</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f0f4f8; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .container { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 16px; 
+            box-shadow: 0 4px 15px rgba(0, 120, 215, 0.15); 
+            width: 100%; 
+            max-width: 400px; 
+            border-top: 6px solid #ffcc00;
+        }
+        h2 { 
+            text-align: center; 
+            color: #0078d7; 
+            margin-bottom: 20px; 
+        }
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: bold; 
+            color: #333; 
+            font-size: 14px;
+        }
+        input, select { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #bce0fd; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #0078d7;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .checkbox-group input {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: #0078d7;
+            cursor: pointer;
+        }
+        .checkbox-group label {
+            font-weight: normal;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.4;
+            cursor: pointer;
+        }
+        button { 
+            width: 100%; 
+            background-color: #ffcc00; 
+            color: #111; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        button:hover { 
+            background-color: #e6b800; 
+        }
+        .step { display: none; }
+        .step.active { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- ნაბიჯი 1: ტელეფონის ნომერი -->
+    <div id="step-phone" class="step active">
+        <h2>PetTaxi-ში შესვლა</h2>
+        <div class="form-group">
+            <label>ტელეფონის ნომერი</label>
+            <input type="tel" id="phone" placeholder="+995 5xx xx xx xx" required>
+        </div>
+        <button onclick="sendCode()">კოდის გაგზავნა</button>
+    </div>
+
+    <!-- ნაბიჯი 2: SMS კოდის დადასტურება -->
+    <div id="step-verify" class="step">
+        <h2>კოდის შეყვანა</h2>
+        <div class="form-group">
+            <label>სმს-ით მიღებული 4-ნიშნა კოდი</label>
+            <input type="text" id="code" placeholder="1234" maxlength="4" required>
+        </div>
+        <button onclick="verifyCode()">დადასტურება</button>
+    </div>
+
+    <!-- ნაბიჯი 3: პირადი და ცხოველის მონაცემები -->
+    <div id="step-profile" class="step">
+        <h2>პროფილის შევსება</h2>
+        <div class="form-group">
+            <label>სახელი და გვარი</label>
+            <input type="text" id="fullname" placeholder="მაგ: გიორგი ბერიძე" required>
+        </div>
+        <div class="form-group">
+            <label>პირადი ნომერი</label>
+            <input type="text" id="id-number" placeholder="11 ნიშნა პირადი ნომერი" maxlength="11">
+        </div>
+        <div class="form-group">
+            <label>მისამართი</label>
+            <input type="text" id="address" placeholder="ქალაქი, ქუჩა, კორპუსი">
+        </div>
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #e0effe;">
+        <div class="form-group">
+            <label>ცხოველის ტიპი</label>
+            <select id="pet-type">
+                <option value="dog">ძაღლი</option>
+                <option value="cat">კატა</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>ცხოველის სახელი</label>
+            <input type="text" id="pet-name" placeholder="მაგ: რექსი">
+        </div>
+        <div class="form-group">
+            <label>ცხოველის წონა (კგ)</label>
+            <input type="number" id="pet-weight" placeholder="მაგ: 12">
+        </div>
+        <div class="form-group">
+            <label>ცხოველის ზომა</label>
+            <select id="pet-size">
+                <option value="small">პატარა (< 10 კგ)</option>
+                <option value="medium">საშუალო (10 - 25 კგ)</option>
+                <option value="large">დიდი (> 25 კგ)</option>
+            </select>
+        </div>
+
+        <!-- თანხმობის ველი -->
+        <div class="checkbox-group">
+            <input type="checkbox" id="save-data-consent" required>
+            <label for="save-data-consent">ვეთანხმები, რომ PetTaxi-ს მომსახურების სერვისმა შეინახოს ჩემი და ცხოველის მონაცემები სამომავლო შეკვეთების გამარტივების მიზნით.</label>
+        </div>
+
+        <button onclick="completeRegistration()">რეგისტრაციის დასრულება</button>
+    </div>
+</div>
+
+<script>
+    function sendCode() {
+        const phone = document.getElementById('phone').value;
+        if(phone.length < 9) {
+            alert('გთხოვთ შეიყვანოთ სწორი ნომერი');
+            return;
+        }
+        document.getElementById('step-phone').classList.remove('active');
+        document.getElementById('step-verify').classList.add('active');
+    }
+
+    function verifyCode() {
+        const code = document.getElementById('code').value;
+        if(code.length !== 4) {
+            alert('კოდი შედგება 4 ნიშნისგან');
+            return;
+        }
+        document.getElementById('step-verify').classList.remove('active');
+        document.getElementById('step-profile').classList.add('active');
+    }
+
+    function completeRegistration() {
+        const fullname = document.getElementById('fullname').value;
+        const consent = document.getElementById('save-data-consent').checked;
+
+        if(!fullname) {
+            alert('გთხოვთ მიუთითოთ სახელი და გვარი');
+            return;
+        }
+        if(!consent) {
+            alert('მონაცემების შესანახად აუცილებელია თანხმობის მონიშვნა');
+            return;
+        }
+
+        alert('რეგისტრაცია წარმატებით დასრულდა! გადაგყავთ რუკაზე...');
+        // აქედან მომხმარებელი გადავა რუკის ეკრანზე
+    }
+</script>
+
+</body>
+</html>
