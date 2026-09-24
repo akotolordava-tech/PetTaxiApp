@@ -668,8 +668,11 @@
         document.getElementById('html-root').setAttribute('lang', lang);
         
         document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        
+        // ვპოულობთ და ვააქტიურებთ იმ ღილაკს, რომელსაც დააკლიკა მომხმარებელმა
         event.target.classList.add('active');
 
+        // ვცვლით ყველა ტექსტს საიტზე დინამკურად
         document.querySelectorAll('[data-key]').forEach(el => {
             const key = el.getAttribute('data-key');
             if (translations[lang][key]) {
@@ -677,8 +680,16 @@
             }
         });
 
+        // დინამიური სათაურების განახლება
         if(document.getElementById('step-booking').classList.contains('active')) {
             document.getElementById('booking-title').innerText = isBookingLater ? translations[lang].title_booking_later : translations[lang].title_booking;
+        }
+        
+        // თუ ფასი უკვე გამოთვლილია, ენის შეცვლისას ფასის წარწერაც განახლდეს
+        const start = document.getElementById('startAddress').value;
+        const end = document.getElementById('endAddress').value;
+        if (start && end) {
+            document.getElementById('price-text').innerHTML = `${translations[currentLang].price_label}<strong>${calculatedPrice} ლარი</strong>`;
         }
     }
 
