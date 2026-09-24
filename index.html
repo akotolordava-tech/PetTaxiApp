@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetTaxi - რეგისტრაცია</title>
+    <title>PetTaxi</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -28,8 +28,33 @@
             max-width: 400px; 
             border-top: 6px solid #ffcc00;
             text-align: center;
+            position: relative;
+        }
+        /* ენების არჩევანი ზედა მარჯვენა კუთხეში */
+        .lang-switcher {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 5px;
+        }
+        .lang-btn {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lang-btn.active, .lang-btn:hover {
+            background: #0078d7;
+            color: #fff;
+            border-color: #0078d7;
         }
         .logo-container {
+            margin-top: 15px;
             margin-bottom: 20px;
         }
         .logo-container img {
@@ -114,6 +139,13 @@
 <body>
 
 <div class="container">
+    <!-- ენების ღილაკები -->
+    <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLanguage('ka')">GE</button>
+        <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+    </div>
+
     <!-- მრგვალი ლოგო -->
     <div class="logo-container">
         <img src="logo.png" alt="PetTaxi Logo">
@@ -121,79 +153,182 @@
 
     <!-- ნაბიჯი 1: ტელეფონის ნომერი -->
     <div id="step-phone" class="step active">
-        <h2>PetTaxi - ში შესვლა</h2>
+        <h2 data-key="title_login">PetTaxi - ში შესვლა</h2>
         <div class="form-group">
-            <label>ტელეფონის ნომერი</label>
+            <label data-key="label_phone">ტელეფონის ნომერი</label>
             <input type="tel" id="phone" placeholder="+995 5xx xx xx xx" required>
         </div>
-        <button onclick="sendCode()">კოდის გაგზავნა</button>
+        <button onclick="sendCode()" data-key="btn_send">კოდის გაგზავნა</button>
     </div>
 
     <!-- ნაბიჯი 2: SMS კოდის დადასტურება -->
     <div id="step-verify" class="step">
-        <h2>PetTaxi - ში შესვლა</h2>
+        <h2 data-key="title_login">PetTaxi - ში შესვლა</h2>
         <div class="form-group">
-            <label>სმს-ით მიღებული 4-ნიშნა კოდი</label>
+            <label data-key="label_code">სმს-ით მიღებული 4-ნიშნა კოდი</label>
             <input type="text" id="code" placeholder="1234" maxlength="4" required>
         </div>
-        <button onclick="verifyCode()">დადასტურება</button>
+        <button onclick="verifyCode()" data-key="btn_verify">დადასტურება</button>
     </div>
 
     <!-- ნაბიჯი 3: პირადი და ცხოველის მონაცემები -->
     <div id="step-profile" class="step">
-        <h2>პროფილის შევსება</h2>
+        <h2 data-key="title_profile">პროფილის შევსება</h2>
         <div class="form-group">
-            <label>სახელი და გვარი</label>
+            <label data-key="label_fullname">სახელი და გვარი</label>
             <input type="text" id="fullname" placeholder="მაგ: გიორგი ბერიძე" required>
         </div>
         <div class="form-group">
-            <label>პირადი ნომერი</label>
+            <label data-key="label_id">პირადი ნომერი</label>
             <input type="text" id="id-number" placeholder="11 ნიშნა პირადი ნომერი" maxlength="11">
         </div>
         <div class="form-group">
-            <label>მისამართი</label>
+            <label data-key="label_address">მისამართი</label>
             <input type="text" id="address" placeholder="ქალაქი, ქუჩა, კორპუსი">
         </div>
         <hr style="margin: 15px 0; border: 0; border-top: 1px solid #e0effe;">
         <div class="form-group">
-            <label>ცხოველის ტიპი</label>
+            <label data-key="label_pettype">ცხოველის ტიპი</label>
             <select id="pet-type">
-                <option value="dog">ძაღლი</option>
-                <option value="cat">კატა</option>
+                <option value="dog" data-key="opt_dog">ძაღლი</option>
+                <option value="cat" data-key="opt_cat">კატა</option>
             </select>
         </div>
         <div class="form-group">
-            <label>ცხოველის სახელი</label>
+            <label data-key="label_petname">ცხოველის სახელი</label>
             <input type="text" id="pet-name" placeholder="მაგ: რექსი">
         </div>
         <div class="form-group">
-            <label>ცხოველის წონა (კგ)</label>
+            <label data-key="label_petweight">ცხოველის წონა (კგ)</label>
             <input type="number" id="pet-weight" placeholder="მაგ: 12">
         </div>
         <div class="form-group">
-            <label>ცხოველის ზომა</label>
+            <label data-key="label_petsize">ცხოველის ზომა</label>
             <select id="pet-size">
-                <option value="small">პატარა (< 10 კგ)</option>
-                <option value="medium">საშუალო (10 - 25 კგ)</option>
-                <option value="large">დიდი (> 25 კგ)</option>
+                <option value="small" data-key="opt_small">პატარა (< 10 კგ)</option>
+                <option value="medium" data-key="opt_medium">საშუალო (10 - 25 კგ)</option>
+                <option value="large" data-key="opt_large">დიდი (> 25 კგ)</option>
             </select>
         </div>
 
         <!-- თანხმობის ველი -->
         <div class="checkbox-group">
             <input type="checkbox" id="save-data-consent" required>
-            <label for="save-data-consent">ვეთანხმები, რომ PetTaxi-ს მომსახურების სერვისმა შეინახოს ჩემი და ცხოველის მონაცემები სამომავლო შეკვეთების გამარტივების მიზნით.</label>
+            <label for="save-data-consent" data-key="label_consent">ვეთანხმები, რომ PetTaxi-ს მომსახურების სერვისმა შეინახოს ჩემი და ცხოველის მონაცემები სამომავლო შეკვეთების გამარტივების მიზნით.</label>
         </div>
 
-        <button onclick="completeRegistration()">რეგისტრაციის დასრულება</button>
+        <button onclick="completeRegistration()" data-key="btn_finish">რეგისტრაციის დასრულება</button>
     </div>
 </div>
 
 <script>
+    // ენების ლექსიკონი
+    const translations = {
+        ka: {
+            title_login: "PetTaxi - ში შესვლა",
+            label_phone: "ტელეფონის ნომერი",
+            btn_send: "კოდის გაგზავნა",
+            label_code: "სმს-ით მიღებული 4-ნიშნა კოდი",
+            btn_verify: "დადასტურება",
+            title_profile: "პროფილის შევსება",
+            label_fullname: "სახელი და გვარი",
+            label_id: "პირადი ნომერი",
+            label_address: "მისამართი",
+            label_pettype: "ცხოველის ტიპი",
+            opt_dog: "ძაღლი",
+            opt_cat: "კატა",
+            label_petname: "ცხოველის სახელი",
+            label_petweight: "ცხოველის წონა (კგ)",
+            label_petsize: "ცხოველის ზომა",
+            opt_small: "პატარა (< 10 კგ)",
+            opt_medium: "საშუალო (10 - 25 კგ)",
+            opt_large: "დიდი (> 25 კგ)",
+            label_consent: "ვეთანხმები, რომ PetTaxi-ს მომსახურების სერვისმა შეინახოს ჩემი და ცხოველის მონაცემები სამომავლო შეკვეთების გამარტივების მიზნით.",
+            btn_finish: "რეგისტრაციის დასრულება",
+            err_phone: "გთხოვთ შეიყვანოთ სწორი ნომერი",
+            err_code: "კოდი შედგება 4 ნიშნისგან",
+            err_name: "გთხოვთ მიუთითოთ სახელი და გვარი",
+            err_consent: "მონაცემების შესანახად აუცილებელია თანხმობის მონიშვნა",
+            success: "რეგისტრაცია წარმატებით დასრულდა! გადაგყავთ რუკაზე..."
+        },
+        en: {
+            title_login: "Sign in to PetTaxi",
+            label_phone: "Phone Number",
+            btn_send: "Send Code",
+            label_code: "4-digit code received via SMS",
+            btn_verify: "Verify",
+            title_profile: "Complete Profile",
+            label_fullname: "Full Name",
+            label_id: "ID Number",
+            label_address: "Address",
+            label_pettype: "Pet Type",
+            opt_dog: "Dog",
+            opt_cat: "Cat",
+            label_petname: "Pet's Name",
+            label_petweight: "Pet's Weight (kg)",
+            label_petsize: "Pet's Size",
+            opt_small: "Small (< 10 kg)",
+            opt_medium: "Medium (10 - 25 kg)",
+            opt_large: "Large (> 25 kg)",
+            label_consent: "I agree that PetTaxi service can save my and my pet's data to simplify future orders.",
+            btn_finish: "Complete Registration",
+            err_phone: "Please enter a valid phone number",
+            err_code: "Code must be 4 digits",
+            err_name: "Please enter your full name",
+            err_consent: "Consent is required to save data",
+            success: "Registration completed successfully! Redirecting to map..."
+        },
+        ru: {
+            title_login: "Вход в PetTaxi",
+            label_phone: "Номер телефона",
+            btn_send: "Отправить код",
+            label_code: "4-значный код из SMS",
+            btn_verify: "Подтвердить",
+            title_profile: "Заполнение профиля",
+            label_fullname: "Имя и фамилия",
+            label_id: "Личный номер",
+            label_address: "Адрес",
+            label_pettype: "Тип питомца",
+            opt_dog: "Собака",
+            opt_cat: "Кошка",
+            label_petname: "Кличка питомца",
+            label_petweight: "Вес питомца (кг)",
+            label_petsize: "Размер питомца",
+            opt_small: "Маленький (< 10 кг)",
+            opt_medium: "Средний (10 - 25 кг)",
+            opt_large: "Большой (> 25 кг)",
+            label_consent: "Я согласен(-на), что служба PetTaxi сохранит мои данные и данные моего питомца для упрощения будущих заказов.",
+            btn_finish: "Завершить регистрацию",
+            err_phone: "Пожалуйста, введите правильный номер",
+            err_code: "Код должен состоять из 4 цифр",
+            err_name: "Пожалуйста, укажите имя и фамилию",
+            err_consent: "Для сохранения данных необходимо согласие",
+            success: "Регистрация успешно завершена! Переход на карту..."
+        }
+    };
+
+    let currentLang = 'ka';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        
+        // აქტიური ღილაკის სტილის შეცვლა
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // ყველა ტექსტის განახლება ატრიბუტის (data-key) მიხედვით
+        document.querySelectorAll('[data-key]').forEach(el => {
+            const key = el.getAttribute('data-key');
+            if (translations[lang][key]) {
+                el.innerText = translations[lang][key];
+            }
+        });
+    }
+
     function sendCode() {
         const phone = document.getElementById('phone').value;
         if(phone.length < 9) {
-            alert('გთხოვთ შეიყვანოთ სწორი ნომერი');
+            alert(translations[currentLang].err_phone);
             return;
         }
         document.getElementById('step-phone').classList.remove('active');
@@ -203,7 +338,7 @@
     function verifyCode() {
         const code = document.getElementById('code').value;
         if(code.length !== 4) {
-            alert('კოდი შედგება 4 ნიშნისგან');
+            alert(translations[currentLang].err_code);
             return;
         }
         document.getElementById('step-verify').classList.remove('active');
@@ -215,15 +350,15 @@
         const consent = document.getElementById('save-data-consent').checked;
 
         if(!fullname) {
-            alert('გთხოვთ მიუთითოთ სახელი და გვარი');
+            alert(translations[currentLang].err_name);
             return;
         }
         if(!consent) {
-            alert('მონაცემების შესანახად აუცილებელია თანხმობის მონიშვნა');
+            alert(translations[currentLang].err_consent);
             return;
         }
 
-        alert('რეგისტრაცია წარმატებით დასრულდა! გადაგყავთ რუკაზე...');
+        alert(translations[currentLang].success);
     }
 </script>
 
