@@ -133,18 +133,30 @@
         button:hover { 
             background-color: #e6b800; 
         }
-        /* PetGo დიდი მთავარი ღილაკი */
+        /* PetGo მთავარი მენიუს ღილაკები */
         .petgo-main-btn {
             background-color: #0078d7;
             color: #fff;
-            font-size: 20px;
-            padding: 18px;
+            font-size: 18px;
+            padding: 15px;
             border-radius: 12px;
-            margin-top: 20px;
+            margin-top: 12px;
             box-shadow: 0 4px 15px rgba(0, 120, 215, 0.4);
         }
         .petgo-main-btn:hover {
             background-color: #005fa3;
+        }
+        .petgo-secondary-btn {
+            background-color: #28a745;
+            color: #fff;
+            font-size: 18px;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 12px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        }
+        .petgo-secondary-btn:hover {
+            background-color: #218838;
         }
         .back-btn {
             background-color: #e4e6eb;
@@ -244,16 +256,24 @@
         <button onclick="completeRegistration()" data-key="btn_finish">რეგისტრაციის დასრულება</button>
     </div>
 
-    <!-- ნაბიჯი 4: PetGo მთავარი მენიუ (შეკვეთის დაწყება) -->
+    <!-- ნაბიჯი 4: PetGo მთავარი მენიუ (ორი ღილაკით) -->
     <div id="step-petgo" class="step">
         <h2 data-key="title_petgo">მიიღეთ მომსახურება</h2>
-        <p style="color: #666; font-size: 14px; margin-bottom: 20px;" data-key="subtitle_petgo">დააჭირეთ ღილაკს შეკვეთის დასაწყებად</p>
-        <button class="petgo-main-btn" onclick="openBookingScreen()" data-key="btn_petgo">PetGo</button>
+        <p style="color: #666; font-size: 14px; margin-bottom: 20px;" data-key="subtitle_petgo">აირჩიეთ მომსახურების ტიპი</p>
+        <button class="petgo-main-btn" onclick="openBookingScreen(false)" data-key="btn_petgo_now">PetGo (ახლავე გამოძახება)</button>
+        <button class="petgo-secondary-btn" onclick="openBookingScreen(true)" data-key="btn_petgo_later">📅 დაჯავშნე სამომავლოდ</button>
     </div>
 
-    <!-- ნაბიჯი 5: საწყისი და დანიშნულების მისამართების ჩასაწერი ფანჯარა -->
+    <!-- ნაბიჯი 5: მისამართების და (სურვილისამებრ) თარიღის ჩასაწერი ფანჯარა -->
     <div id="step-booking" class="step">
-        <h2 data-key="title_booking">მგზავრობის დეტალები</h2>
+        <h2 id="booking-title" data-key="title_booking">მგზავრობის დეტალები</h2>
+        
+        <!-- თარიღისა და საათის ველი (ჩნდება მხოლოდ ჯავშნისას) -->
+        <div id="datetime-container" class="form-group" style="display: none;">
+            <label data-key="label_datetime">🗓️ მიუთითეთ თარიღი და საათი</label>
+            <input type="datetime-local" id="booking-datetime">
+        </div>
+
         <div class="form-group">
             <label data-key="label_pickup">📍 საწყისი მისამართი (სად აყვანონ)</label>
             <input type="text" id="pickup-address" placeholder="მაგ: რუსთაველის გამზირი 12">
@@ -294,17 +314,20 @@
             label_consent: "ვეთანხმები, რომ PetTaxi-ს მომსახურების სერვისმა შეინახოს ჩემი და ცხოველის მონაცემები სამომავლო შეკვეთების გამარტივების მიზნით.",
             btn_finish: "რეგისტრაციის დასრულება",
             title_petgo: "მიიღეთ მომსახურება",
-            subtitle_petgo: "დააჭირეთ ღილაკს შეკვეთის დასაწყებად",
-            btn_petgo: "PetGo",
+            subtitle_petgo: "აირჩიეთ მომსახურების ტიპი",
+            btn_petgo_now: "PetGo (ახლავე გამოძახება)",
+            btn_petgo_later: "📅 დაჯავშნე სამომავლოდ",
             title_booking: "მგზავრობის დეტალები",
+            title_booking_later: "სამომავლო ჯავშანი",
+            label_datetime: "🗓️ მიუთითეთ თარიღი და საათი",
             label_pickup: "📍 საწყისი მისამართი (სად აყვანონ)",
             label_destination: "🏁 დანიშნულების ადგილი (სად მიჰყავთ)",
-            btn_order: "ტაქსის გამოძახება",
+            btn_order: "მოთხოვნის გაგზავნა",
             err_phone: "გთხოვთ შეიყვანოთ სწორი ნომერი",
             err_code: "კოდი შედგება 4 ნიშნისგან",
             err_name: "გთხოვთ მიუთითოთ სახელი და გვარი",
             err_consent: "მონაცემების შესანახად აუცილებელია თანხმობის მონიშვნა",
-            err_addresses: "გთხოვთ შეავსოთ ორივე მისამართი",
+            err_addresses: "გთხოვთ შეავსოთ ყველა სავალდებულო ველი",
             success_order: "შეკვეთა მიღებულია! მძღოლი მალე დაგიკავშირდებათ."
         },
         en: {
@@ -331,17 +354,20 @@
             label_consent: "I agree that PetTaxi service can save my and my pet's data to simplify future orders.",
             btn_finish: "Complete Registration",
             title_petgo: "Get Service",
-            subtitle_petgo: "Click the button to start your order",
-            btn_petgo: "PetGo",
+            subtitle_petgo: "Choose service type",
+            btn_petgo_now: "PetGo (Call Now)",
+            btn_petgo_later: "📅 Book for Later",
             title_booking: "Trip Details",
+            title_booking_later: "Future Booking",
+            label_datetime: "🗓️ Select Date & Time",
             label_pickup: "📍 Pickup Address",
             label_destination: "🏁 Destination Address",
-            btn_order: "Request Taxi",
+            btn_order: "Send Request",
             err_phone: "Please enter a valid phone number",
             err_code: "Code must be 4 digits",
             err_name: "Please enter your full name",
             err_consent: "Consent is required to save data",
-            err_addresses: "Please fill in both addresses",
+            err_addresses: "Please fill in all required fields",
             success_order: "Order received! Driver will contact you soon."
         },
         ru: {
@@ -368,22 +394,26 @@
             label_consent: "Я согласен(-на), что служба PetTaxi сохранит мои данные и данные моего питомца для упрощения будущих заказов.",
             btn_finish: "Завершить регистрацию",
             title_petgo: "Получить услугу",
-            subtitle_petgo: "Нажмите кнопку, чтобы начать заказ",
-            btn_petgo: "PetGo",
+            subtitle_petgo: "Выберите тип услуги",
+            btn_petgo_now: "PetGo (Вызвать сейчас)",
+            btn_petgo_later: "📅 Забронировать",
             title_booking: "Детали поездки",
+            title_booking_later: "Будущее бронирование",
+            label_datetime: "🗓️ Выберите дату и время",
             label_pickup: "📍 Адрес отправления",
             label_destination: "🏁 Адрес назначения",
-            btn_order: "Вызвать такси",
+            btn_order: "Отправить запрос",
             err_phone: "Пожалуйста, введите правильный номер",
             err_code: "Код должен состоять из 4 цифр",
             err_name: "Пожалуйста, укажите имя и фамилию",
             err_consent: "Для сохранения данных необходимо согласие",
-            err_addresses: "Пожалуйста, заполните оба адреса",
+            err_addresses: "Пожалуйста, заполните все обязательные поля",
             success_order: "Заказ принят! Водитель скоро с вами свяжется."
         }
     };
 
     let currentLang = 'ka';
+    let isBookingLater = false;
 
     function setLanguage(lang) {
         currentLang = lang;
@@ -437,13 +467,24 @@
             return;
         }
 
-        // რეგისტრაციის დასრულების შემდეგ გადაგვყავს PetGo მთავარ ეკრანზე
         document.getElementById('step-profile').classList.remove('active');
         document.getElementById('step-petgo').classList.add('active');
     }
 
-    // PetGo ღილაკზე დაჭერისას იხსნება მისამართების ეკრანი
-    function openBookingScreen() {
+    // ფუნქცია ხსნის მისამართების ფანჯარას (თუ later=true, აჩვენებს თარიღის ველსაც)
+    function openBookingScreen(later) {
+        isBookingLater = later;
+        const datetimeContainer = document.getElementById('datetime-container');
+        const bookingTitle = document.getElementById('booking-title');
+
+        if (later) {
+            datetimeContainer.style.display = 'block';
+            bookingTitle.innerText = translations[currentLang].title_booking_later;
+        } else {
+            datetimeContainer.style.display = 'none';
+            bookingTitle.innerText = translations[currentLang].title_booking;
+        }
+
         document.getElementById('step-petgo').classList.remove('active');
         document.getElementById('step-booking').classList.add('active');
     }
@@ -456,8 +497,9 @@
     function submitOrder() {
         const pickup = document.getElementById('pickup-address').value;
         const destination = document.getElementById('destination-address').value;
+        const datetime = document.getElementById('booking-datetime').value;
 
-        if(!pickup || !destination) {
+        if(!pickup || !destination || (isBookingLater && !datetime)) {
             alert(translations[currentLang].err_addresses);
             return;
         }
