@@ -32,7 +32,6 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-        /* ენების არჩევანი ზედა მარჯვენა კუთხეში */
         .lang-switcher {
             position: absolute;
             top: 15px;
@@ -97,7 +96,6 @@
             border-color: #0078d7;
         }
         
-        /* რაოდენობების ამორჩევის სტილი (+ / -) */
         .counter-section {
             background: #f8fbff;
             border: 1px solid #d0e7ff;
@@ -152,7 +150,6 @@
             color: #333;
         }
 
-        /* გადახდის მეთოდების სტილი */
         .payment-options {
             display: flex;
             flex-direction: column;
@@ -290,19 +287,17 @@
 <body>
 
 <div class="container">
-    <!-- ენების ღილაკები -->
     <div class="lang-switcher">
         <button class="lang-btn active" onclick="setLanguage('ka')">GE</button>
         <button class="lang-btn" onclick="setLanguage('en')">EN</button>
         <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
     </div>
 
-    <!-- მრგვალი ლოგო -->
     <div class="logo-container">
         <img src="logo.png" alt="PetTaxi Logo">
     </div>
 
-    <!-- ნაბიჯი 1: ტელეფონის ნომერი -->
+    <!-- ნაბიჯი 1: ტელეფონი -->
     <div id="step-phone" class="step active">
         <h2 data-key="title_login">PetTaxi - ში შესვლა</h2>
         <div class="form-group">
@@ -312,7 +307,7 @@
         <button onclick="sendCode()" data-key="btn_send">კოდის გაგზავნა</button>
     </div>
 
-    <!-- ნაბიჯი 2: SMS კოდის დადასტურება -->
+    <!-- ნაბიჯი 2: SMS კოდი -->
     <div id="step-verify" class="step">
         <h2 data-key="title_login">PetTaxi - ში შესვლა</h2>
         <div class="form-group">
@@ -323,7 +318,7 @@
         <button class="back-btn" onclick="goBackToPhone()" data-key="btn_back">← უკან დაბრუნება</button>
     </div>
 
-    <!-- ნაბიჯი 3: პირადი, ცხოველის და რაოდენობების მონაცემები -->
+    <!-- ნაბიჯი 3: პროფილი -->
     <div id="step-profile" class="step">
         <h2 data-key="title_profile">პროფილის შევსება</h2>
         <div class="form-group">
@@ -339,7 +334,6 @@
             <input type="text" id="address" placeholder="ქალაქი, ქუჩა, კორპუსი">
         </div>
         
-        <!-- მგზავრების, ცხოველების და ბარგის რაოდენობის ბლოკი -->
         <label data-key="label_counts_title" style="margin-bottom: 8px;">მგზავრების და ტვირთის რაოდენობა</label>
         <div class="counter-section">
             <div class="counter-row">
@@ -404,7 +398,7 @@
         <button onclick="completeRegistration()" data-key="btn_finish">რეგისტრაციის დასრულება</button>
     </div>
 
-    <!-- ნაბიჯი 4: PetGo მთავარი მენიუ -->
+    <!-- ნაბიჯი 4: მთავარი მენიუ -->
     <div id="step-petgo" class="step">
         <h2 data-key="title_petgo">მიიღეთ მომსახურება</h2>
         <p style="color: #666; font-size: 14px; margin-bottom: 20px;" data-key="subtitle_petgo">აირჩიეთ მომსახურების ტიპი</p>
@@ -412,7 +406,7 @@
         <button class="petgo-secondary-btn" onclick="openBookingScreen(true)" data-key="btn_petgo_later">📅 დაჯავშნე სამომავლოდ</button>
     </div>
 
-    <!-- ნაბიჯი 5: მისამართების არჩევა და ფასის ჩვენება -->
+    <!-- ნაბიჯი 5: მგზავრობის დეტალები -->
     <div id="step-booking" class="step">
         <h2 id="booking-title" data-key="title_booking">მგზავრობის დეტალები</h2>
         
@@ -453,7 +447,7 @@
         <button class="back-btn" onclick="goBackToPetGo()" data-key="btn_back" style="margin-top: 15px;">← უკან</button>
     </div>
 
-    <!-- ნაბიჯი 6: გადახდის მეთოდის არჩევა -->
+    <!-- ნაბიჯი 6: გადახდის მეთოდი -->
     <div id="step-payment" class="step">
         <h2 data-key="title_payment">გადახდის მეთოდი</h2>
         <p style="color: #666; font-size: 14px; margin-bottom: 15px;" id="payment-amount-summary"></p>
@@ -638,7 +632,7 @@
             success_call: "Заказ успешно принят! Водитель в пути.",
             err_phone: "Пожалуйста, введите правильный номер",
             err_code: "Код должен состоять из 4 цифр",
-            err_name: "Пожалуйста, укажите имя и фамилию",
+            err_name: "Пожалуйста, укажите имя и фамилия",
             err_consent: "Для сохранения данных необходимо согласие",
             err_datetime: "Пожалуйста, выберите дату и время бронирования!"
         }
@@ -668,11 +662,8 @@
         document.getElementById('html-root').setAttribute('lang', lang);
         
         document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-        
-        // ვპოულობთ და ვააქტიურებთ იმ ღილაკს, რომელსაც დააკლიკა მომხმარებელმა
         event.target.classList.add('active');
 
-        // ვცვლით ყველა ტექსტს საიტზე დინამკურად
         document.querySelectorAll('[data-key]').forEach(el => {
             const key = el.getAttribute('data-key');
             if (translations[lang][key]) {
@@ -680,12 +671,10 @@
             }
         });
 
-        // დინამიური სათაურების განახლება
         if(document.getElementById('step-booking').classList.contains('active')) {
             document.getElementById('booking-title').innerText = isBookingLater ? translations[lang].title_booking_later : translations[lang].title_booking;
         }
         
-        // თუ ფასი უკვე გამოთვლილია, ენის შეცვლისას ფასის წარწერაც განახლდეს
         const start = document.getElementById('startAddress').value;
         const end = document.getElementById('endAddress').value;
         if (start && end) {
@@ -739,10 +728,6 @@
         isBookingLater = later;
         const datetimeContainer = document.getElementById('datetime-container');
         const bookingTitle = document.getElementById('booking-title');
-        
-        document.getElementById('startAddress').selectedIndex = 0;
-        document.getElementById('endAddress').selectedIndex = 0;
-        document.getElementById('price-display').style.display = 'none';
 
         if (later) {
             datetimeContainer.style.display = 'block';
@@ -795,7 +780,9 @@
 
     function confirmOrder() {
         alert(translations[currentLang].success_call);
-        openBookingScreen(isBookingLater);
+        // აღარ ვასუფთავებთ მისამართებს ავტომატურად, რათა მომხმარებელმა ნახოს თავისი არჩევანი
+        document.getElementById('step-payment').classList.remove('active');
+        document.getElementById('step-petgo').classList.add('active');
     }
 </script>
 
