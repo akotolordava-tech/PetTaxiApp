@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ნინო & ლუკა — საქორწილო მოსაწვევი</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+Georgian:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #fdfbf7;
+            color: #4a4a4a;
+            font-family: 'Noto Sans Georgian', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card-container {
+            width: 100%;
+            max-width: 430px;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            text-align: center;
+            padding: 30px 20px;
+            margin: 15px;
+            border: 1px solid #f0e6df;
+        }
+        .subtitle {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #8c7a6b;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .names {
+            font-family: 'Marcellus', 'Noto Sans Georgian', serif;
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .date {
+            font-size: 18px;
+            color: #b8977e;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .divider {
+            width: 50px;
+            height: 1px;
+            background-color: #b8977e;
+            margin: 0 auto 25px;
+        }
+        .details-box {
+            background: #faf6f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .details-item {
+            margin-bottom: 15px;
+        }
+        .details-item:last-child {
+            margin-bottom: 0;
+        }
+        .details-title {
+            font-weight: 600;
+            color: #8c7a6b;
+            font-size: 13px;
+        }
+        .details-text {
+            font-size: 16px;
+            color: #333;
+            margin-top: 4px;
+        }
+        .btn-map {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            background-color: #b8977e;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+        .btn-map:hover {
+            background-color: #9e7f67;
+        }
+        .rsvp-section {
+            border-top: 1px dashed #e0d0c0;
+            padding-top: 20px;
+        }
+        .footer-logo {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="card-container">
+        <p class="subtitle">სიყვარულით გიწვევთ ქორწილში</p>
+        <h1 class="names">ნინო & ლუკა</h1>
+        <p class="date">14 ივნისი, 2026</p>
+        <div class="divider"></div>
+
+        <div class="details-box">
+            <div class="details-item">
+                <p class="details-title">დრო</p>
+                <p class="details-text">16:00 საათი</p>
+            </div>
+            <div class="details-item" style="margin-top: 15px;">
+                <p class="details-title">ადგილმდებარეობა</p>
+                <p class="details-text">შატო ლისი / Chateau Lisi</p>
+            </div>
+            <div class="details-item" style="margin-top: 15px;">
+                <p class="details-title">დრესკოდი</p>
+                <p class="details-text">Black Tie / Cocktail</p>
+            </div>
+        </div>
+
+        <a href="https://maps.google.com" target="_blank" class="btn-map">📍 ადგილმდებარეობის ნახვა რუკაზე</a>
+
+        <div class="rsvp-section">
+            <p class="subtitle" style="font-size: 12px; margin-bottom: 10px;">გთხოვთ დაადასტუროთ დასწრება</p>
+            <!-- აქ ჩაისმება Google Form-ის ბმული -->
+            <a href="https://forms.google.com" target="_blank" class="btn-map" style="background: #2c3e50;">✍️ დასწრების დადასტურება (RSVP)</a>
+        </div>
+
+        <div class="footer-logo">
+            Powered by <strong>VibeInvite</strong>
+        </div>
+    </div>
+
+</body>
+</html>
