@@ -697,14 +697,15 @@
         document.getElementById('step-phone').classList.add('active');
     }
 
-    function verifyCode() {
-        const code = document.getElementById('code').value;
-        if(code.length !== 4) {
-            alert(translations[currentLang].err_code);
-            return;
-        }
-        document.getElementById('step-verify').classList.remove('active');
-        document.getElementById('step-profile').classList.add('active');
+   function verifyCode() {
+    const code = document.getElementById('code').value.trim(); // აქ დაემატა .trim()
+    if (code.length !== 4) {
+        alert(translations[currentLang].err_code);
+        return;
+    }
+    document.getElementById('step-verify').classList.remove('active');
+    document.getElementById('step-profile').classList.add('active');
+}
     }
 
     function completeRegistration() {
