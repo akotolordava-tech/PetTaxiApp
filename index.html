@@ -312,7 +312,7 @@
         <h2 data-key="title_login">PetTaxi - ში შესვლა</h2>
         <div class="form-group">
             <label data-key="label_code">სმს-ით მიღებული 4-ნიშნა კოდი</label>
-            <input type="text" id="code" placeholder="1234" maxlength="4" required>
+           <input type="text" id="code" inputmode="numeric" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="1234" maxlength="4" required>
         </div>
         <button onclick="verifyCode()" data-key="btn_verify">დადასტურება</button>
         <button class="back-btn" onclick="goBackToPhone()" data-key="btn_back">← უკან დაბრუნება</button>
@@ -697,15 +697,16 @@
         document.getElementById('step-phone').classList.add('active');
     }
 
-   function verifyCode() {
-    const code = document.getElementById('code').value.trim(); // აქ დაემატა .trim()
-    if (code.length !== 4) {
-        alert(translations[currentLang].err_code);
-        return;
+  function verifyCode() 
+  {
+        const code = document.getElementById('code').value.trim(); // აქ დაემატა .trim()
+        if (code.length !== 4) {
+            alert(translations[currentLang].err_code);
+            return;
+        }
+        document.getElementById('step-verify').classList.remove('active');
+        document.getElementById('step-profile').classList.add('active');
     }
-    document.getElementById('step-verify').classList.remove('active');
-    document.getElementById('step-profile').classList.add('active');
-
     
 
     function completeRegistration() {
